@@ -48,7 +48,7 @@ URL_Shortener/
     │   ├── main.tsx      # React entry point
     │   └── types.ts      # Shared TypeScript types
     ├── index.html
-    ├── vite.config.ts    # Dev proxy → backend on :8000
+    ├── vite.config.ts
     ├── tailwind.config.js
     └── package.json
 ```
@@ -88,9 +88,10 @@ npm install
 npm run dev
 ```
 
-App → **http://localhost:5173**
-
-Vite proxies `/api/*` to the backend so there are no CORS issues in development.
+Set `VITE_API_BASE_URL` in `frontend/.env` to the backend origin (for example,
+`http://localhost:8000`), then open **http://localhost:5173**. The browser calls
+the backend directly, so configure `CORS_ORIGINS` on the backend to allow the
+frontend origin.
 
 ---
 

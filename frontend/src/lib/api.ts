@@ -1,9 +1,7 @@
 /**
  * Thin typed wrapper around the backend REST API.
  *
- * Requests go to a relative `/api` path. In development Vite proxies that to the
- * backend (see vite.config.ts); in Docker nginx does the same. So the browser only
- * ever talks to one origin and CORS stays out of the picture.
+ * Requests use the backend origin configured with VITE_API_BASE_URL.
  */
 
 import type {
@@ -21,6 +19,7 @@ import type {
 } from '../types'
 
 const TOKEN_KEY = 'urlshortener.token'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '')
 
 export const tokenStore = {
   get: (): string | null => localStorage.getItem(TOKEN_KEY),
@@ -70,7 +69,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 
   let response: Response
   try {
-    response = await fetch(path, { ...init, headers })
+    response = await fetch(`${API_BASE_URL}${path}`, { ...init, headers })
   } catch {
     throw new ApiError(0, 'Cannot reach the server. Is the backend running?')
   }
