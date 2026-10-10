@@ -19,7 +19,26 @@ import type {
 } from '../types'
 
 const TOKEN_KEY = 'urlshortener.token'
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '')
+const API_BASE_URL = parseApiBaseUrl(import.meta.env.VITE_API_BASE_URL)
+
+function parseApiBaseUrl(value: string | undefined): URL {
+  if (!value) {
+    throw new Error('VITE_API_BASE_URL must be set to the backend origin.')
+  }
+
+  let url: URL
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error('VITE_API_BASE_URL must be an absolute URL, such as https://api.example.com.')
+  }
+
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    throw new Error('VITE_API_BASE_URL must use HTTP or HTTPS.')
+  }
+
+  return url
+}
 
 export const tokenStore = {
   get: (): string | null => localStorage.getItem(TOKEN_KEY),
@@ -69,7 +88,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 
   let response: Response
   try {
-    response = await fetch(`${API_BASE_URL}${path}`, { ...init, headers })
+    response = await fetch(new URL(path, API_BASE_URL), { ...init, headers })
   } catch {
     throw new ApiError(0, 'Cannot reach the server. Is the backend running?')
   }
