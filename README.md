@@ -172,7 +172,7 @@ All protected endpoints require `Authorization: Bearer <token>`.
 - URL CRUD (create, list, update, delete, pagination, search)
 - Redirect (cache hit, cache miss, expired, disabled, 404)
 - Analytics (summary, timeline, click log, top URLs)
-- Redis caching (15 checks over a real socket)
+- Redis caching
 
 ---
 
