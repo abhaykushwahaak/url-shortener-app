@@ -10,10 +10,10 @@ A full-stack URL shortener with JWT authentication, Redis caching, Celery async 
 |---|---|
 | **Backend API** | FastAPI 0.141 · Python 3.14 |
 | **Database** | SQLite (dev) · PostgreSQL (prod) via SQLAlchemy 2 + Alembic |
-| **Cache** | Redis 8 (circuit-breaker fallback when unavailable) |
+| **Cache** | Redis 8  |
 | **Async tasks** | Celery 5 (click recording runs off the hot path) |
 | **Auth** | JWT (PyJWT) · bcrypt password hashing |
-| **Frontend** | React 18 · TypeScript · Vite 6 · Tailwind CSS 3 |
+| **Frontend** | React 18 · Tailwind CSS 3 |
 | **Charts** | Recharts 2 |
 | **Routing** | React Router 6 |
 
@@ -34,7 +34,7 @@ URL_Shortener/
 │   │   ├── main.py       # FastAPI app + lifespan
 │   │   └── seed.py       # Dev seed data
 │   ├── tests/            # pytest suite (46 tests)
-│   ├── alembic/          # DB migrations
+│   ├── alembic/          
 │   ├── requirements.txt
 │   ├── alembic.ini
 │   └── pytest.ini
@@ -46,9 +46,7 @@ URL_Shortener/
     │   ├── pages/        # LoginPage, DashboardPage, URLsPage, AnalyticsPage
     │   ├── App.tsx       # Router + RequireAuth guard
     │   ├── main.tsx      # React entry point
-    │   └── types.ts      # Shared TypeScript types
     ├── index.html
-    ├── vite.config.ts
     ├── tailwind.config.js
     └── package.json
 ```
@@ -61,7 +59,7 @@ URL_Shortener/
 
 - **Python 3.12+** with `venv`
 - **Node.js 18+**
-- **Redis** *(optional — app degrades gracefully without it)*
+- **Redis** 
 
 ### 1 — Backend
 
@@ -181,11 +179,10 @@ All protected endpoints require `Authorization: Bearer <token>`.
 ## Production Notes
 
 1. **Use PostgreSQL** — set `DATABASE_URL=postgresql+psycopg://user:pass@host/db`
-2. **Run Alembic migrations** — `alembic upgrade head` before first start
-3. **Start a Celery worker** — `celery -A app.core.celery_app worker -l info`
-4. **Set a real `JWT_SECRET_KEY`** — at least 32 random bytes
-5. **Point `BASE_URL`** to your public domain — e.g. `https://short.example.com`
-6. **Serve the frontend build** via nginx or a CDN — `npm run build` → `dist/`
+2. **Start a Celery worker** — `celery -A app.core.celery_app worker -l info`
+3. **Set a real `JWT_SECRET_KEY`** — at least 32 random bytes
+4. **Point `BASE_URL`** to your public domain — e.g. `https://short.example.com`
+5. **Serve the frontend build** via nginx or a CDN — `npm run build` → `dist/`
 
 ---
 
